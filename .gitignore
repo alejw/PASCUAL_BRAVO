@@ -1,7 +1,14 @@
+# Build & VS cache
 bin/
 obj/
 .vs/
-*.user
-*.suo
 Debug/
 Release/
+*.user
+*.suo
+*.cache
+*.log
+
+# NuGet
+*.nupkg
+packages/
