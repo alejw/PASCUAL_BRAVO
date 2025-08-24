@@ -1,0 +1,14 @@
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\Pantallas_Sistema_facturación.exe
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\Pantallas_Sistema_facturación.deps.json
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\Pantallas_Sistema_facturación.runtimeconfig.json
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\Pantallas_Sistema_facturación.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\Pantallas_Sistema_facturación.pdb
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.AssemblyInfoInputs.cache
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.AssemblyInfo.cs
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.csproj.CoreCompileInputs.cache
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\refint\Pantallas_Sistema_facturación.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.pdb
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.genruntimeconfig.cache
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\ref\Pantallas_Sistema_facturación.dll
