@@ -1,33 +1,29 @@
 using System;
-using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Pantallas_Sistema_facturación.Seguridad
 {
     public class SeguridadForm : Form
     {
-        private ComboBox cboEmpleado, cboRol;
+        private string connectionString = "Server=localhost;Database=[DBFACTURAS];User Id=Alejo1234;Password=Alejo1234;";
+        private ComboBox cboEmpleado;
         private Button btnAsignar, btnQuitar;
-        private ErrorProvider errorProvider;
         private DataGridView dgvAsignaciones;
-
-        // Listas simuladas (se pueden llenar desde BD futuro)
-        private BindingList<Empleado> empleados = new BindingList<Empleado>();
-        private BindingList<Rol> roles = new BindingList<Rol>();
-        private BindingList<Asignacion> asignaciones = new BindingList<Asignacion>();
-
-        private BindingSource bsAsig = new BindingSource();
+        private ErrorProvider errorProvider;
+        private TextBox txtUsuario, txtClave;
+        private string usuarioActual = "admin";
 
         public SeguridadForm()
         {
-            Text = "Administrar Seguridad (Roles por Empleado)";
+            Text = "Administrar Seguridad (Usuarios por Empleado)";
             BackColor = Color.White;
 
             var lblTitulo = new Label
             {
-                Text = "ASIGNACIÓN DE ROLES A EMPLEADOS",
+                Text = "ASIGNACIÓN DE USUARIO A EMPLEADO",
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 ForeColor = Color.FromArgb(60, 120, 200),
                 Left = 20, Top = 20, Width = 460
@@ -36,8 +32,11 @@ namespace Pantallas_Sistema_facturación.Seguridad
             var lblEmpleado = new Label { Text = "Empleado:", Left = 20, Top = 60, Width = 80 };
             cboEmpleado = new ComboBox { Left = 110, Top = 55, Width = 220, DropDownStyle = ComboBoxStyle.DropDownList };
 
-            var lblRol = new Label { Text = "Rol:", Left = 20, Top = 100, Width = 80 };
-            cboRol = new ComboBox { Left = 110, Top = 95, Width = 220, DropDownStyle = ComboBoxStyle.DropDownList };
+            var lblUsuario = new Label { Text = "Usuario:", Left = 20, Top = 100, Width = 80 };
+            txtUsuario = new TextBox { Left = 110, Top = 95, Width = 220 };
+
+            var lblClave = new Label { Text = "Clave:", Left = 20, Top = 140, Width = 80 };
+            txtClave = new TextBox { Left = 110, Top = 135, Width = 220, PasswordChar = '●' };
 
             btnAsignar = new Button
             {
@@ -55,11 +54,9 @@ namespace Pantallas_Sistema_facturación.Seguridad
             btnAsignar.Click += BtnAsignar_Click;
             btnQuitar.Click += BtnQuitar_Click;
 
-            errorProvider = new ErrorProvider();
-
             dgvAsignaciones = new DataGridView
             {
-                Left = 20, Top = 150, Width = 560, Height = 240,
+                Left = 20, Top = 180, Width = 560, Height = 170,
                 ReadOnly = true,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -75,78 +72,85 @@ namespace Pantallas_Sistema_facturación.Seguridad
             dgvAsignaciones.DefaultCellStyle.ForeColor = Color.Black;
             dgvAsignaciones.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
             dgvAsignaciones.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvAsignaciones.CellClick += DgvAsignaciones_CellClick;
 
-            // Datos de ejemplo (simulados)
-            empleados.Add(new Empleado { Id = 1, Nombre = "Ana Ruiz" });
-            empleados.Add(new Empleado { Id = 2, Nombre = "Carlos Pérez" });
-            roles.Add(new Rol { Id = 1, Nombre = "Administrador" });
-            roles.Add(new Rol { Id = 2, Nombre = "Cajero" });
-            roles.Add(new Rol { Id = 3, Nombre = "Consulta" });
-
-            cboEmpleado.DataSource = empleados;
-            cboEmpleado.DisplayMember = nameof(Empleado.Nombre);
-            cboEmpleado.ValueMember = nameof(Empleado.Id);
-
-            cboRol.DataSource = roles;
-            cboRol.DisplayMember = nameof(Rol.Nombre);
-            cboRol.ValueMember = nameof(Rol.Id);
-
-            bsAsig.DataSource = asignaciones;
-            dgvAsignaciones.DataSource = bsAsig;
+            errorProvider = new ErrorProvider();
 
             Controls.AddRange(new Control[] {
-                lblTitulo,lblEmpleado,cboEmpleado,lblRol,cboRol,btnAsignar,btnQuitar,dgvAsignaciones
+                lblTitulo,lblEmpleado,cboEmpleado,lblUsuario,txtUsuario,lblClave,txtClave,btnAsignar,btnQuitar,dgvAsignaciones
             });
+
+            Load += (s, e) => { CargarEmpleados(); CargarAsignaciones(); };
+        }
+
+        private void CargarEmpleados()
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                var da = new SqlDataAdapter("SELECT IdEmpleado, StrNombre FROM TBLEMPLEADO", conn);
+                var dt = new DataTable();
+                da.Fill(dt);
+                cboEmpleado.DataSource = dt;
+                cboEmpleado.DisplayMember = "StrNombre";
+                cboEmpleado.ValueMember = "IdEmpleado";
+            }
+        }
+
+        private void CargarAsignaciones()
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                var da = new SqlDataAdapter(
+                    @"SELECT S.IdSeguridad, E.StrNombre AS Empleado, S.StrUsuario, S.StrClave, S.DtmFechaModifica, S.StrUsuarioModifico
+                      FROM TBLSEGURIDAD S
+                      JOIN TBLEMPLEADO E ON S.IdEmpleado = E.IdEmpleado", conn);
+                var dt = new DataTable();
+                da.Fill(dt);
+                dgvAsignaciones.DataSource = dt;
+            }
         }
 
         private void BtnAsignar_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
-            if (cboEmpleado.SelectedItem == null) { errorProvider.SetError(cboEmpleado, "Seleccione un empleado."); return; }
-            if (cboRol.SelectedItem == null) { errorProvider.SetError(cboRol, "Seleccione un rol."); return; }
-
-            var emp = (Empleado)cboEmpleado.SelectedItem;
-            var rol = (Rol)cboRol.SelectedItem;
-
-            // Evitar duplicados
-            if (asignaciones.Any(a => a.EmpleadoId == emp.Id && a.RolId == rol.Id))
+            if (cboEmpleado.SelectedValue == null || string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
             {
-                MessageBox.Show("Este empleado ya tiene ese rol asignado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                errorProvider.SetError(cboEmpleado, "Seleccione empleado y complete usuario/clave.");
                 return;
             }
-
-            asignaciones.Add(new Asignacion
+            using (var conn = new SqlConnection(connectionString))
             {
-                EmpleadoId = emp.Id,
-                Empleado = emp.Nombre,
-                RolId = rol.Id,
-                Rol = rol.Nombre
-            });
+                conn.Open();
+                var cmd = new SqlCommand(
+                    @"INSERT INTO TBLSEGURIDAD (IdEmpleado, StrUsuario, StrClave, DtmFechaModifica, StrUsuarioModifico)
+                      VALUES (@idEmpleado, @usuario, @clave, @fecha, @modifico)", conn);
+                cmd.Parameters.AddWithValue("@idEmpleado", cboEmpleado.SelectedValue);
+                cmd.Parameters.AddWithValue("@usuario", txtUsuario.Text.Trim());
+                cmd.Parameters.AddWithValue("@clave", txtClave.Text.Trim());
+                cmd.Parameters.AddWithValue("@fecha", DateTime.Now);
+                cmd.Parameters.AddWithValue("@modifico", usuarioActual);
+                cmd.ExecuteNonQuery();
+            }
+            CargarAsignaciones();
         }
 
         private void BtnQuitar_Click(object sender, EventArgs e)
         {
-            if (dgvAsignaciones.CurrentRow == null) { MessageBox.Show("Seleccione una fila.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            var item = (Asignacion)bsAsig[dgvAsignaciones.CurrentRow.Index];
-            asignaciones.Remove(item);
+            if (dgvAsignaciones.SelectedRows.Count == 0) return;
+            var id = dgvAsignaciones.SelectedRows[0].Cells["IdSeguridad"].Value.ToString();
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM TBLSEGURIDAD WHERE IdSeguridad=@id", conn);
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+            CargarAsignaciones();
         }
 
-        public class Empleado
+        private void DgvAsignaciones_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            public int Id { get; set; }
-            public string Nombre { get; set; }
-        }
-        public class Rol
-        {
-            public int Id { get; set; }
-            public string Nombre { get; set; }
-        }
-        public class Asignacion
-        {
-            public int EmpleadoId { get; set; }
-            public string Empleado { get; set; }
-            public int RolId { get; set; }
-            public string Rol { get; set; }
+            // Puedes mostrar detalles si lo necesitas
         }
     }
 }

@@ -12,3 +12,12 @@ C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIEN
 C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.pdb
 C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.genruntimeconfig.cache
 C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\ref\Pantallas_Sistema_facturación.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.sourcelink.json
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\System.Data.SqlClient.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\runtimes\win-arm64\native\sni.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\runtimes\win-x64\native\sni.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\runtimes\win-x86\native\sni.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\runtimes\unix\lib\net8.0\System.Data.SqlClient.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\bin\Debug\net9.0-windows\runtimes\win\lib\net8.0\System.Data.SqlClient.dll
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantallas_Sistema_facturación.csproj.AssemblyReference.cache
+C:\Users\Alejandro Moreno\OneDrive\Escritorio\PASCUAL_BRAVO\SEMESTRE 4\HERRAMIENTAS DE PROGRAMACION lll\Pantallas_Sistema_facturación\obj\Debug\net9.0-windows\Pantalla.9BFB567A.Up2Date

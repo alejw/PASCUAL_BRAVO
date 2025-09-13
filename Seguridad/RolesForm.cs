@@ -1,5 +1,6 @@
 using System;
-using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,14 +8,11 @@ namespace Pantallas_Sistema_facturación.Seguridad
 {
     public class RolesForm : Form
     {
-        private TextBox txtNombre, txtDescripcion;
-        private Button btnAgregar, btnActualizar, btnEliminar, btnLimpiar;
-        private ErrorProvider errorProvider;
+        private string connectionString = "Server=localhost;Database=[DBFACTURAS];User Id=Alejo1234;Password=Alejo1234;";
         private DataGridView dgvRoles;
-
-        private BindingList<Rol> roles = new BindingList<Rol>();
-        private BindingSource bs = new BindingSource();
-        private Rol seleccionado;
+        private TextBox txtDescripcion;
+        private Button btnAgregar, btnEditar, btnEliminar;
+        private ErrorProvider errorProvider;
 
         public RolesForm()
         {
@@ -29,40 +27,20 @@ namespace Pantallas_Sistema_facturación.Seguridad
                 Left = 20, Top = 20, Width = 320
             };
 
-            var lblNombre = new Label { Text = "Nombre:", Left = 20, Top = 60, Width = 80 };
-            txtNombre = new TextBox { Left = 110, Top = 60, Width = 220 };
-
-            var lblDescripcion = new Label { Text = "Descripción:", Left = 20, Top = 100, Width = 80 };
-            txtDescripcion = new TextBox { Left = 110, Top = 100, Width = 220, Multiline = true, Height = 60 };
+            var lblDescripcion = new Label { Text = "Descripción:", Left = 20, Top = 60, Width = 80 };
+            txtDescripcion = new TextBox { Left = 110, Top = 60, Width = 220, Multiline = true, Height = 60 };
 
             btnAgregar = CrearBtn("Agregar", 350, 60);
-            btnActualizar = CrearBtn("Actualizar", 350, 100);
+            btnEditar = CrearBtn("Editar", 350, 100);
             btnEliminar = CrearBtn("Eliminar", 350, 140);
-            btnLimpiar = CrearBtn("Limpiar", 350, 180);
 
-            btnAgregar.Click += (_, __) => { if (Validar()) { roles.Add(new Rol { Nombre = txtNombre.Text.Trim(), Descripcion = txtDescripcion.Text.Trim() }); Limpiar(); } };
-            btnActualizar.Click += (_, __) =>
-            {
-                if (!Validar()) return;
-                if (seleccionado == null) { MessageBox.Show("Seleccione un rol de la lista.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                seleccionado.Nombre = txtNombre.Text.Trim();
-                seleccionado.Descripcion = txtDescripcion.Text.Trim();
-                bs.ResetCurrentItem();
-                Limpiar();
-            };
-            btnEliminar.Click += (_, __) =>
-            {
-                if (seleccionado == null) { MessageBox.Show("Seleccione un rol para eliminar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-                roles.Remove(seleccionado);
-                Limpiar();
-            };
-            btnLimpiar.Click += (_, __) => Limpiar();
-
-            errorProvider = new ErrorProvider();
+            btnAgregar.Click += BtnAgregar_Click;
+            btnEditar.Click += BtnEditar_Click;
+            btnEliminar.Click += BtnEliminar_Click;
 
             dgvRoles = new DataGridView
             {
-                Left = 20, Top = 230, Width = 560, Height = 160,
+                Left = 20, Top = 130, Width = 560, Height = 160,
                 ReadOnly = true,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -76,23 +54,16 @@ namespace Pantallas_Sistema_facturación.Seguridad
             dgvRoles.DefaultCellStyle.ForeColor = Color.Black;
             dgvRoles.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
             dgvRoles.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvRoles.CellClick += DgvRoles_CellClick;
 
-            bs.DataSource = roles;
-            dgvRoles.DataSource = bs;
-            dgvRoles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvRoles.MultiSelect = false;
-            dgvRoles.CellClick += (_, e) =>
-            {
-                if (e.RowIndex < 0) return;
-                seleccionado = (Rol)bs[e.RowIndex];
-                txtNombre.Text = seleccionado.Nombre;
-                txtDescripcion.Text = seleccionado.Descripcion;
-            };
+            errorProvider = new ErrorProvider();
 
             Controls.AddRange(new Control[] {
-                lblTitulo,lblNombre,txtNombre,lblDescripcion,txtDescripcion,
-                btnAgregar,btnActualizar,btnEliminar,btnLimpiar,dgvRoles
+                lblTitulo,lblDescripcion,txtDescripcion,
+                btnAgregar,btnEditar,btnEliminar,dgvRoles
             });
+
+            Load += (s, e) => CargarRoles();
         }
 
         private Button CrearBtn(string t, int x, int y) => new Button
@@ -102,26 +73,80 @@ namespace Pantallas_Sistema_facturación.Seguridad
             Font = new Font("Segoe UI", 10, FontStyle.Bold)
         };
 
-        private bool Validar()
+        private void CargarRoles()
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                var da = new SqlDataAdapter("SELECT IdRolEmpleado, StrDescripcion FROM TBLROLES", conn);
+                var dt = new DataTable();
+                da.Fill(dt);
+                dgvRoles.DataSource = dt;
+            }
+        }
+
+        private void BtnAgregar_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
-            bool ok = true;
-            if (string.IsNullOrWhiteSpace(txtNombre.Text)) { errorProvider.SetError(txtNombre, "El nombre es obligatorio."); ok = false; }
-            if (string.IsNullOrWhiteSpace(txtDescripcion.Text)) { errorProvider.SetError(txtDescripcion, "La descripción es obligatoria."); ok = false; }
-            return ok;
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
+            {
+                errorProvider.SetError(txtDescripcion, "La descripción es obligatoria.");
+                return;
+            }
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO TBLROLES (StrDescripcion) VALUES (@desc)", conn);
+                cmd.Parameters.AddWithValue("@desc", txtDescripcion.Text.Trim());
+                cmd.ExecuteNonQuery();
+            }
+            CargarRoles();
+            LimpiarCampos();
         }
 
-        private void Limpiar()
+        private void BtnEditar_Click(object sender, EventArgs e)
         {
-            txtNombre.Clear(); txtDescripcion.Clear();
-            seleccionado = null;
-            txtNombre.Focus();
+            if (dgvRoles.SelectedRows.Count == 0) return;
+            var id = dgvRoles.SelectedRows[0].Cells["IdRolEmpleado"].Value.ToString();
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "UPDATE TBLROLES SET StrDescripcion=@desc WHERE IdRolEmpleado=@id", conn);
+                cmd.Parameters.AddWithValue("@desc", txtDescripcion.Text.Trim());
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+            CargarRoles();
+            LimpiarCampos();
         }
 
-        public class Rol
+        private void BtnEliminar_Click(object sender, EventArgs e)
         {
-            public string Nombre { get; set; }
-            public string Descripcion { get; set; }
+            if (dgvRoles.SelectedRows.Count == 0) return;
+            var id = dgvRoles.SelectedRows[0].Cells["IdRolEmpleado"].Value.ToString();
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM TBLROLES WHERE IdRolEmpleado=@id", conn);
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+            CargarRoles();
+            LimpiarCampos();
+        }
+
+        private void DgvRoles_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var row = dgvRoles.Rows[e.RowIndex];
+            txtDescripcion.Text = row.Cells["StrDescripcion"].Value?.ToString();
+        }
+
+        private void LimpiarCampos()
+        {
+            txtDescripcion.Clear();
+            txtDescripcion.Focus();
         }
     }
 }

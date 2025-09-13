@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -17,6 +18,8 @@ namespace Pantallas_Sistema_facturación
         private Button btnEye;
         private Timer revealTimer;
         private bool eyeUsedOnce = false;
+
+        private string connectionString = "Server=localhost;Database=[DBFACTURAS];User Id=Alejo1234;Password=Alejo1234;";
 
         public LoginForm()
         {
@@ -152,7 +155,6 @@ namespace Pantallas_Sistema_facturación
 
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            // Validación con ErrorProvider
             errorProvider.Clear();
             bool ok = true;
 
@@ -168,24 +170,35 @@ namespace Pantallas_Sistema_facturación
             }
             if (!ok) return;
 
-            // Demo: credenciales fijas
-            if (txtUsuario.Text.Trim().Equals("admin", StringComparison.OrdinalIgnoreCase)
-                && txtContraseña.Text == "admin")
+            // Validación contra la base de datos
+#pragma warning disable CS0618 // El tipo o el miembro están obsoletos
+            using (var conn = new SqlConnection(connectionString))
             {
-                Hide();
-                using (var main = new MainForm())
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM TBLSEGURIDAD WHERE StrUsuario=@usuario AND StrClave=@clave", conn);
+                cmd.Parameters.AddWithValue("@usuario", txtUsuario.Text.Trim());
+                cmd.Parameters.AddWithValue("@clave", txtContraseña.Text.Trim());
+                int count = (int)cmd.ExecuteScalar();
+
+                if (count > 0)
                 {
-                    main.ShowDialog(this);
+                    Hide();
+                    using (var main = new MainForm())
+                    {
+                        main.ShowDialog(this);
+                    }
+                    Close();
                 }
-                Close();
+                else
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtContraseña.SelectAll();
+                    txtContraseña.Focus();
+                }
             }
-            else
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtContraseña.SelectAll();
-                txtContraseña.Focus();
-            }
+#pragma warning restore CS0618 // El tipo o el miembro están obsoletos
         }
     }
 }

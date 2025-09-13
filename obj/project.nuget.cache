@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "XbK7y8yLUFM=",
+  "dgSpecHash": "BD38mdMUTD8=",
   "success": true,
   "projectFilePath": "C:\\Users\\Alejandro Moreno\\OneDrive\\Escritorio\\PASCUAL_BRAVO\\SEMESTRE 4\\HERRAMIENTAS DE PROGRAMACION lll\\Pantallas_Sistema_facturación\\Pantallas_Sistema_facturación.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Alejandro Moreno\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Alejandro Moreno\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Alejandro Moreno\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Alejandro Moreno\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\Alejandro Moreno\\.nuget\\packages\\system.data.sqlclient\\4.9.0\\system.data.sqlclient.4.9.0.nupkg.sha512"
+  ],
   "logs": []
 }
